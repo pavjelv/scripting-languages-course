@@ -169,6 +169,20 @@ class Test(unittest.TestCase):
         self.assertEqual(Polynomial([2, 3, 7, 3]), res1)
         self.assertEqual(res1, res2)
 
+    def test_mul_three_polynomials(self):
+        p1 = Polynomial([1, 1, 3])
+        p2 = Polynomial([2, 1])
+        p3 = Polynomial([1, -1, 1])
+
+        self.assertEqual(p1 * p2 * p3, p3 * p1 * p2)
+        self.assertEqual(p1 * p2 * p3, p2 * p3 * p1)
+
+        p1.coeffs = [1]
+        p2.coeffs = [2]
+        p3.coeffs = [1]
+
+        self.assertEqual(p1 * p2 * p3, Polynomial(2))
+
     def test_mul_zero(self):
         p1 = Polynomial([1, 1, 1])
 

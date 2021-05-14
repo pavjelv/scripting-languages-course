@@ -17,8 +17,10 @@ def align_length(v1, v2):
 
 
 def trim(v):
-    while v[0] == 0:
+    length = len(v) - 1
+    while v[0] == 0 and length > 0:
         del v[0]
+        length -= 1
 
 
 class Polynomial:
@@ -82,6 +84,8 @@ class Polynomial:
 
     def __mul__(self, value):
         if isinstance(value, int):
+            if value == 0:
+                return Polynomial(0)
             result = []
             for arg in self.coeffs:
                 result.append(arg * value)
@@ -98,7 +102,7 @@ class Polynomial:
 
     def __rmul__(self, value):
         if value == 0:
-            return self
+            return Polynomial(0)
         else:
             return self.__mul__(value)
 

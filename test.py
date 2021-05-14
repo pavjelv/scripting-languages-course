@@ -1,5 +1,5 @@
 import unittest
-from Polynomial.polynomial import Polynomial
+from polynomial import Polynomial
 
 
 class Test(unittest.TestCase):
@@ -17,6 +17,9 @@ class Test(unittest.TestCase):
 
     def test_incorrect_list_constructor(self):
         self.assertRaises(TypeError, Polynomial, ["1", "2"])
+
+    def test_incorrect_tuple_constructor(self):
+        self.assertRaises(TypeError, Polynomial, ("1", "2"))
 
     def test_change_coeffs(self):
         p = Polynomial([1, 2, 3])
@@ -73,8 +76,17 @@ class Test(unittest.TestCase):
         res1 = p + 1
         res2 = 1 + p
 
-        self.assertEqual([1, 2, 4], res1.coeffs)
-        self.assertEqual([1, 2, 4], res2.coeffs)
+        self.assertEqual(Polynomial([1, 2, 4]), res1)
+        self.assertEqual(res1, res2)
+
+    def test_add_zero(self):
+        p1 = Polynomial([1, 1, 1])
+
+        res1 = p1 + 0
+        res2 = 0 + p1
+
+        self.assertEqual(Polynomial([1, 1, 1]), res1)
+        self.assertEqual(res1, res2)
 
     def test_add(self):
         p1 = Polynomial([1, 2, 1])
@@ -83,8 +95,18 @@ class Test(unittest.TestCase):
         res1 = p1 + p2
         res2 = p2 + p1
 
-        self.assertEqual([1, 3, 2], res1.coeffs)
-        self.assertEqual([1, 3, 2], res2.coeffs)
+        self.assertEqual(Polynomial([1, 3, 2]), res1)
+        self.assertEqual(res1, res2)
+
+    def test_add_zero_polynomial(self):
+        p1 = Polynomial([1, 0, 1])
+        p2 = Polynomial([1, 1])
+
+        res1 = p1 + p2
+        res2 = p2 + p1
+
+        self.assertEqual(Polynomial([1, 1, 2]), res1)
+        self.assertEqual(res1, res2)
 
     def test_sub_int(self):
         p1 = Polynomial([1, 2, 3])
@@ -92,8 +114,8 @@ class Test(unittest.TestCase):
         res1 = p1 - 2
         res2 = 2 - p1
 
-        self.assertEqual([1, 2, 1], res1.coeffs)
-        self.assertEqual([-1, -2, -1], res2.coeffs)
+        self.assertEqual(Polynomial([1, 2, 1]), res1)
+        self.assertEqual(Polynomial([-1, -2, -1]), res2)
 
     def test_sub(self):
         p1 = Polynomial([1, 2, 3])
@@ -112,6 +134,15 @@ class Test(unittest.TestCase):
         self.assertEqual([1, 2], res1.coeffs)
         self.assertEqual([-1, -2], res2.coeffs)
 
+    def test_sub_zero(self):
+        p1 = Polynomial([1, 1, 1])
+
+        res1 = p1 - 0
+        res2 = 0 - p1
+
+        self.assertEqual(Polynomial([1, 1, 1]), res1)
+        self.assertEqual(Polynomial([-1, -1, -1]), res2)
+
     def test_mul_int(self):
         p1 = Polynomial([1, 1, 3])
 
@@ -119,7 +150,7 @@ class Test(unittest.TestCase):
         res2 = 2 * p1
 
         self.assertEqual([2, 2, 6], res1.coeffs)
-        self.assertEqual([2, 2, 6], res2.coeffs)
+        self.assertEqual(res1, res2)
 
     def test_mul(self):
         p1 = Polynomial([1, 1, 3])
@@ -129,14 +160,31 @@ class Test(unittest.TestCase):
         res1 = p1 * p3
         res2 = p3 * p1
 
-        self.assertEqual([1, 0, 3, -2, 3], res1.coeffs)
-        self.assertEqual([1, 0, 3, -2, 3], res2.coeffs)
+        self.assertEqual(Polynomial([1, 0, 3, -2, 3]), res1)
+        self.assertEqual(res1, res2)
 
         res1 = p1 * p2
         res2 = p2 * p1
 
-        self.assertEqual([2, 3, 7, 3], res1.coeffs)
-        self.assertEqual([2, 3, 7, 3], res2.coeffs)
+        self.assertEqual(Polynomial([2, 3, 7, 3]), res1)
+        self.assertEqual(res1, res2)
+
+    def test_mul_zero(self):
+        p1 = Polynomial([1, 1, 1])
+
+        res1 = p1 * 0
+        res2 = 0 * p1
+
+        self.assertEqual(Polynomial(0), res1)
+        self.assertEqual(res1, res2)
+
+    def test_mul_zero_polynomial(self):
+        p1 = Polynomial([1, 1, 1])
+        p2 = Polynomial([2, 0])
+
+        res1 = p1 * p2
+
+        self.assertEqual(Polynomial([2, 2, 2, 0]), res1)
 
     def test_raise_add_incorrect_arg(self):
         p = Polynomial([1, 1, 1])
